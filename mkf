@@ -1,0 +1,25 @@
+#!/bin/bash
+usageString='usage: mkf [-ho] file ...'
+
+while getopts ":oh" option; do
+  case $option in
+    h ) echo $usageString
+      exit 1
+      ;;
+    o ) openInVim=true
+      ;;
+    \?) echo $usageString
+      exit 1
+  esac
+done
+
+# Make sure that $1 references the first "real" option.
+shift $(($OPTIND - 1))
+
+mkdir -p "$(dirname "$1")" || exit 1
+touch "$1"
+
+if [ "$openInVim" = true ]; then
+  vim "$1"
+fi
+
